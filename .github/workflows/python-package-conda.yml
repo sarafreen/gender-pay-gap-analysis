@@ -10,34 +10,25 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    
-    - name: Set up Python 3.10
-      uses: actions/setup-python@v3
-      with:
-        python-version: '3.10'
-    
+
     - name: Set up Miniconda
       uses: conda-incubator/setup-miniconda@v2
       with:
-        miniconda-version: "latest"  # Install the latest version of Miniconda
+        miniconda-version: "latest"
         auto-update-conda: true
-        python-version: 3.10
+        python-version: "3.10" # Ensure Python version is specified here
         activate-environment: base
         use-mamba: false
 
     - name: Install dependencies
       run: |
-        conda env update --file environment.yml --name base
-    
+        conda install -y python=3.10 numpy pandas scikit-learn flake8 pytest
+
     - name: Lint with flake8
       run: |
-        conda install flake8 -y
-        # Stop the build if there are Python syntax errors or undefined names
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # Exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
     - name: Test with pytest
       run: |
-        conda install pytest -y
         pytest
