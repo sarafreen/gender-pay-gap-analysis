@@ -8,20 +8,38 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      
+
+      # Step 1: Set up Miniconda
       - name: Set up Miniconda
         uses: conda-incubator/setup-miniconda@v2
         with:
           python-version: 3.10  # Specify a supported Python version
           auto-update-conda: true
 
+      # Step 2: Debug Conda Installation (Verify installation)
+      - name: Check Conda Installation
+        run: |
+          conda --version
+          which conda
+          conda list
+
+      # Step 3: Configure Conda Channels
       - name: Configure Conda Channels
         run: |
           conda config --add channels conda-forge
           conda config --set channel_priority strict
+          conda info
 
+      # Step 4: Create and activate Conda environment
+      - name: Create Conda Environment
+        run: |
+          conda create -n myenv python=3.10 -y
+          conda activate myenv
+
+      # Step 5: Install dependencies
       - name: Install dependencies
         run: |
-          conda install -y pandas matplotlib seaborn scikit-learn flake8 pytest notebook
+          conda install -n myenv -y pandas matplotlib seaborn scikit-learn flake8 pytest notebook
+
 
 
