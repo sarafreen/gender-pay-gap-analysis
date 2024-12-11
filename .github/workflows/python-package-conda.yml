@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   build-linux:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
@@ -12,16 +12,13 @@ jobs:
       - name: Set up Miniconda
         uses: conda-incubator/setup-miniconda@v2
         with:
-          python-version: 3.10
+          python-version: 3.10  # Specify a supported Python version
           auto-update-conda: true
-          auto-activate-base: true
 
-      - name: Reset Conda Configuration
+      - name: Configure Conda Channels
         run: |
-          conda clean --all --yes
-          conda config --set always_yes true
-          conda config --set changeps1 false
-          conda info
+          conda config --add channels conda-forge
+          conda config --set channel_priority strict
 
       - name: Install dependencies
         run: |
